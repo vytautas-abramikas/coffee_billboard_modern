@@ -1,12 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
-import coffeeData from './coffeeData';
-
-type Coffee = {
-  id: number;
-  name: string;
-  price: number;
-  url: string;
-};
+import OptionsList from './OptionsList';
+import CoffeeCards from './CoffeeCards';
+import coffeeData from '../data/coffeeData';
+import Coffee from '../types/Cofee';
 
 function App() {
   
@@ -108,42 +104,6 @@ function App() {
       localStorage.setItem("coffeeBillboard_nextFreeId", "0");
       return 0;
     });
-  };
-
-  function OptionsList ({ coffeesList }: { coffeesList: Coffee[] }) {
-    return (
-      <>
-        {
-          coffeesList.map((item) => 
-            (<option id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
-          )
-        }
-      </>
-    );
-  };
-
-  function CoffeeCards ({shoppingCart, removeCoffee}: {shoppingCart: Coffee[], removeCoffee: (id: number) => void}) {
-    return (
-      <>
-        {
-          shoppingCart.map((item) =>
-          (
-            <div key={item.id} className="coffee_container">
-              <img src={item.url} alt={item.name}/>
-              <h3>{item.price}€</h3>
-              <p>{item.name}</p>
-              <button 
-                name={String(item.id)}
-                className="remove"
-                onClick={() => removeCoffee(item.id)}
-              >
-              remove
-              </button>
-            </div>
-          ))
-        }
-      </>
-    );
   };
 
   return (
