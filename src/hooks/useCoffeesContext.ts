@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CoffeesContext } from "../contexts/CofeesContextProvider";
+import { CoffeesContext } from "../contexts/CoffeesContextProvider";
 
 export default function useCoffeesContext() {
     const context = useContext(CoffeesContext);
