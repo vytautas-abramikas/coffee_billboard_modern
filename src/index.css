@@ -32,16 +32,19 @@ select, button{
   font-size: 1.4rem;
   padding: 5px;
   border: 0;
+  cursor: pointer;
 }
-button{
-  color : White;
-  background-color: Chocolate;
-  margin-left: 10px;
-}
-button:hover{
+.pay_button:hover, .add_button:hover{
   transform: scale(1.1);
 }
-.pay{
+.add_button, .pay_button {
+  color : White;
+  margin-left: 1rem;
+}
+.add_button{
+  background-color: Chocolate;
+}
+.pay_button{
   background-color: DarkGreen;
 }
 h3,p{

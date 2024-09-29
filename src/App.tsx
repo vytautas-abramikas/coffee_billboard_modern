@@ -8,9 +8,8 @@ function App() {
   const [coffeesList, setCoffeesList] = useState([]);
   const [shoppingCart, setShoppingCart] = useState([]);
 
-  const shoppingPrice = useMemo(() => {
-    return shoppingCart.map(item => item.price).reduce((a, b) => a + b, 0).toFixed(2);
-  }, [shoppingCart]);
+  const shoppingPrice = useMemo(() =>
+    shoppingCart.map(item => item.price).reduce((a, b) => a + b, 0).toFixed(2), [shoppingCart]);
 
 
   useEffect(() => {
@@ -50,7 +49,10 @@ function App() {
   const selectCoffee = (event) => {
     event.preventDefault();
     let id = event.target.value;
-    setSelectedCoffee(parseInt(id));
+    setSelectedCoffee(() => {
+      localStorage.setItem("coffeeBillboard_selectedCoffee", id);
+      return parseInt(id);
+    });
   }
 
   const addCoffee = (event) => {
@@ -84,8 +86,14 @@ function App() {
 
   const payForCoffee = (event) => {
     event.preventDefault();
-    setShoppingCart([]);
-    storeShoppingCartToLocalStorage([]);
+    setShoppingCart(() => {
+      storeShoppingCartToLocalStorage([]);
+      return [];
+    });
+    setNextFreeId(() => {
+      localStorage.setItem("coffeeBillboard_nextFreeId", "0");
+      return 0;
+    });
   };
 
   const OptionsList = ({coffeesList}) => {
@@ -93,7 +101,7 @@ function App() {
       <>
         {
           coffeesList.map((item) => 
-            (<option id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
+            (<option style={{cursor: `pointer`}} id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
           )
         }
       </>
@@ -133,8 +141,8 @@ function App() {
             <select name="coffee_select" value={selectedCoffee} onChange={selectCoffee}>
                 <OptionsList coffeesList={coffeesList}/>  
             </select>
-            <button onClick={addCoffee}>Add</button>
-            <button className="pay" onClick={payForCoffee}>Pay</button>
+            <button className="add_button"onClick={addCoffee}>Add</button>
+            <button className="pay_button" onClick={payForCoffee}>Pay</button>
           </form>
         </header>
         <div className="content_container">
