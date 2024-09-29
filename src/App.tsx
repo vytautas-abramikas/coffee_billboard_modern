@@ -101,7 +101,7 @@ function App() {
       <>
         {
           coffeesList.map((item) => 
-            (<option style={{cursor: `pointer`}} id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
+            (<option id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
           )
         }
       </>
