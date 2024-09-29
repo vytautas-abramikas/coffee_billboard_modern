@@ -1,4 +1,4 @@
-import Coffee from "../types/Cofee";
+import Coffee from "../types/Coffee";
 
 function OptionsList ({ coffeesList }: { coffeesList: Coffee[] }) {
     return (

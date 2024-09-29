@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import OptionsList from './OptionsList';
 import CoffeeCards from './CoffeeCards';
 import coffeeData from '../data/coffeeData';
-import Coffee from '../types/Cofee';
+import Coffee from '../types/Coffee';
 
 function App() {
   

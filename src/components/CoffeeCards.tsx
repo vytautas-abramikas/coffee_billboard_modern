@@ -1,4 +1,4 @@
-import Coffee from "../types/Cofee";
+import Coffee from "../types/Coffee";
 
 function CoffeeCards ({shoppingCart, removeCoffee}: {shoppingCart: Coffee[], removeCoffee: (id: number) => void}) {
     return (

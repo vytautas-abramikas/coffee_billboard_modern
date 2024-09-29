@@ -49,4 +49,4 @@ const coffeeData = [
 	},
 ]
 
-export default coffeeData
+export default coffeeData;
