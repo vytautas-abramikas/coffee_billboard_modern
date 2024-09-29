@@ -1,15 +1,16 @@
-import Coffee from "../types/Coffee";
+import useCoffeesContext from "../hooks/useCoffeesContext";
 
-function OptionsList ({ coffeesList }: { coffeesList: Coffee[] }) {
-    return (
-      <>
-        {
-          coffeesList.map((item) => 
-            (<option id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
-          )
-        }
-      </>
-    );
-  };
+export default function OptionsList () {
 
-export default OptionsList;
+  const { coffeesList } = useCoffeesContext();
+
+  return (
+    <>
+      {
+        coffeesList.map((item) => 
+          (<option id={`option_${item.id}`} key={`option_${item.id}`} value={item.id}>{item.name} - {item.price}€</option>)
+        )
+      }
+    </>
+  );
+};

@@ -47,6 +47,6 @@ const coffeeData = [
 		price: 8.88,
 		url: "./assets/images/coffee8.jpg"
 	},
-]
+];
 
 export default coffeeData;

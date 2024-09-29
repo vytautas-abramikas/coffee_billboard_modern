@@ -1,6 +1,9 @@
-import Coffee from "../types/Coffee";
+import useCoffeesContext from "../hooks/useCoffeesContext";
 
-function CoffeeCards ({shoppingCart, removeCoffee}: {shoppingCart: Coffee[], removeCoffee: (id: number) => void}) {
+export default function CoffeeCards () {
+
+  const { shoppingCart, removeCoffee } = useCoffeesContext();
+
     return (
       <>
         {
@@ -23,5 +26,3 @@ function CoffeeCards ({shoppingCart, removeCoffee}: {shoppingCart: Coffee[], rem
       </>
     );
   };
-
-  export default CoffeeCards;
