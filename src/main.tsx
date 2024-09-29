@@ -1,13 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './components/App.tsx'
-import './index.css'
-import CoffeesContextProvider from './contexts/CoffeesContextProvider.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./components/App.tsx";
+import "./index.css";
+import CoffeesContextProvider from "./contexts/CoffeesContextProvider.tsx";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CoffeesContextProvider>
       <App />
     </CoffeesContextProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
