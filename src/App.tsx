@@ -159,7 +159,7 @@ function App() {
             <button className="pay_button" onClick={payForCoffee}>Pay</button>
           </form>
         </header>
-        <div className="content_container">
+        <div className="shopping_container">
           <CoffeeCards shoppingCart={shoppingCart} removeCoffee={removeCoffee}/>
         </div>
     </>
