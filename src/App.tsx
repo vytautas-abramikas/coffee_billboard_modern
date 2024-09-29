@@ -1,12 +1,19 @@
 import { useState, useMemo, useEffect } from 'react';
 import coffeeData from './coffeeData';
 
+type Coffee = {
+  id: number;
+  name: string;
+  price: number;
+  url: string;
+};
+
 function App() {
   
   const [nextFreeId, setNextFreeId] = useState(0);
   const [selectedCoffee, setSelectedCoffee] = useState(0);
-  const [coffeesList, setCoffeesList] = useState([]);
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [coffeesList, setCoffeesList] = useState<Coffee[]>([]);
+  const [shoppingCart, setShoppingCart] = useState<Coffee[]>([]);
 
   const shoppingPrice = useMemo(() =>
     shoppingCart.map(item => item.price).reduce((a, b) => a + b, 0).toFixed(2), [shoppingCart]);
@@ -25,16 +32,17 @@ function App() {
   }, []);
 
   const getDataFromLocalStorage = () => {
-    if (shoppingCart.length === 0) { 
-      if (localStorage.getItem("coffeeBillboard_shoppingCart") !== null && localStorage.getItem("coffeeBillboard_shoppingCart").length > 2) {
-        setShoppingCart(JSON.parse(localStorage.getItem("coffeeBillboard_shoppingCart")));
-        setNextFreeId(+localStorage.getItem("coffeeBillboard_nextFreeId"));
-        setSelectedCoffee(+localStorage.getItem("coffeeBillboard_selectedCoffee"));
-      };
-    };
+    if (shoppingCart.length === 0) {
+      const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
+      if (storedCart && storedCart.length > 2) {
+        setShoppingCart(JSON.parse(storedCart) as Coffee[]);
+        setNextFreeId(Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0);
+        setSelectedCoffee(Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0);
+      }
+    }
   };
 
-  const storeShoppingCartToLocalStorage = (shoppingCart) => {
+  const storeShoppingCartToLocalStorage = (shoppingCart: Coffee[]) => {
     localStorage.setItem("coffeeBillboard_shoppingCart", JSON.stringify(shoppingCart));
   };
 
@@ -46,29 +54,35 @@ function App() {
     });
   };
 
-  const selectCoffee = (event) => {
+  const selectCoffee = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
     let id = event.target.value;
     setSelectedCoffee(() => {
       localStorage.setItem("coffeeBillboard_selectedCoffee", id);
-      return parseInt(id);
+      return Number(id);
     });
   }
 
-  const addCoffee = (event) => {
+  const addCoffee = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShoppingCart(prev => {
-      let coffeeFromMenu = coffeesList.filter((item) => item.id === selectedCoffee);
+      const coffeeFromMenu = coffeesList.find((item) => item.id === selectedCoffee);
 
-      let coffeeToAdd = {
-        id: nextFreeId,
-        name: coffeeFromMenu[0].name,
-        price: coffeeFromMenu[0].price,
-        url: coffeeFromMenu[0].url
+      if (!coffeeFromMenu) {
+        console.error("Selected coffee not found!");
+        return prev;
       }
 
-      let updatedList = [...prev];
-      updatedList.push(coffeeToAdd);
+      const { name, price, url } = coffeeFromMenu;
+
+      const coffeeToAdd: Coffee = {
+        id: nextFreeId,
+        name: name,
+        price: price,
+        url: url
+      }
+
+      const updatedList = [...prev, coffeeToAdd];
       storeShoppingCartToLocalStorage(updatedList);
       incrementNextFreeId();
 
@@ -76,7 +90,7 @@ function App() {
     })
   };
 
-  const removeCoffee = (id) => {
+  const removeCoffee = (id: number) => {
     setShoppingCart(prev => {
       const shortenedList = prev.filter((item) => item.id !== id);
       storeShoppingCartToLocalStorage(shortenedList);
@@ -84,7 +98,7 @@ function App() {
     });
   };
 
-  const payForCoffee = (event) => {
+  const payForCoffee = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShoppingCart(() => {
       storeShoppingCartToLocalStorage([]);
@@ -96,7 +110,7 @@ function App() {
     });
   };
 
-  const OptionsList = ({coffeesList}) => {
+  function OptionsList ({ coffeesList }: { coffeesList: Coffee[] }) {
     return (
       <>
         {
@@ -108,7 +122,7 @@ function App() {
     );
   };
 
-  const CoffeeCards = ({shoppingCart, removeCoffee}) => {
+  function CoffeeCards ({shoppingCart, removeCoffee}: {shoppingCart: Coffee[], removeCoffee: (id: number) => void}) {
     return (
       <>
         {
@@ -119,7 +133,7 @@ function App() {
               <h3>{item.price}€</h3>
               <p>{item.name}</p>
               <button 
-                name={item.id}
+                name={String(item.id)}
                 className="remove"
                 onClick={() => removeCoffee(item.id)}
               >
