@@ -10,10 +10,17 @@ export default function CoffeesContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [nextFreeId, setNextFreeId] = useState(0);
-  const [selectedCoffee, setSelectedCoffee] = useState(0);
+  const [nextFreeId, setNextFreeId] = useState<number>(
+    () => Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0
+  );
+  const [selectedCoffee, setSelectedCoffee] = useState<number>(
+    () => Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0
+  );
   const [coffeesList, setCoffeesList] = useState<TCoffee[]>([]);
-  const [shoppingCart, setShoppingCart] = useState<TCoffee[]>([]);
+  const [shoppingCart, setShoppingCart] = useState<TCoffee[]>(() => {
+    const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
 
   const shoppingPrice = useMemo(
     () =>
@@ -25,45 +32,22 @@ export default function CoffeesContextProvider({
   );
 
   useEffect(() => {
+    //simulate an API call to fetch data
     (async () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           setCoffeesList(coffeeData);
-          getDataFromLocalStorage();
           resolve();
         }, 100);
       });
     })();
   }, []);
 
-  const getDataFromLocalStorage = () => {
-    if (shoppingCart.length === 0) {
-      const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
-      if (storedCart && storedCart.length > 2) {
-        setShoppingCart(JSON.parse(storedCart) as TCoffee[]);
-        setNextFreeId(
-          Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0
-        );
-        setSelectedCoffee(
-          Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0
-        );
-      }
-    }
-  };
-
   const storeShoppingCartToLocalStorage = (shoppingCart: TCoffee[]) => {
     localStorage.setItem(
       "coffeeBillboard_shoppingCart",
       JSON.stringify(shoppingCart)
     );
-  };
-
-  const incrementNextFreeId = () => {
-    setNextFreeId((prev) => {
-      const newId = prev + 1;
-      localStorage.setItem("coffeeBillboard_nextFreeId", String(newId));
-      return newId;
-    });
   };
 
   const selectCoffee = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -77,6 +61,13 @@ export default function CoffeesContextProvider({
 
   const addCoffee = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
+    setNextFreeId((prev) => {
+      const newId = prev + 1;
+      localStorage.setItem("coffeeBillboard_nextFreeId", String(newId));
+      return newId;
+    });
+
     setShoppingCart((prev) => {
       const coffeeFromMenu = coffeesList.find(
         (item) => item.id === selectedCoffee
@@ -98,7 +89,6 @@ export default function CoffeesContextProvider({
 
       const updatedList = [...prev, coffeeToAdd];
       storeShoppingCartToLocalStorage(updatedList);
-      incrementNextFreeId();
 
       return updatedList;
     });
