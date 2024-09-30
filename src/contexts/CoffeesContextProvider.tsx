@@ -10,17 +10,10 @@ export default function CoffeesContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [nextFreeId, setNextFreeId] = useState<number>(
-    () => Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0
-  );
-  const [selectedCoffee, setSelectedCoffee] = useState<number>(
-    () => Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0
-  );
+  const [nextFreeId, setNextFreeId] = useState(0);
+  const [selectedCoffee, setSelectedCoffee] = useState(0);
   const [coffeesList, setCoffeesList] = useState<TCoffee[]>([]);
-  const [shoppingCart, setShoppingCart] = useState<TCoffee[]>(() => {
-    const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
-    return storedCart ? JSON.parse(storedCart) : [];
-  });
+  const [shoppingCart, setShoppingCart] = useState<TCoffee[]>([]);
 
   const shoppingPrice = useMemo(
     () =>
@@ -32,6 +25,15 @@ export default function CoffeesContextProvider({
   );
 
   useEffect(() => {
+    const storedNextFreeId =
+      Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0;
+    const storedSelectedCoffee =
+      Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0;
+    const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
+
+    setNextFreeId(storedNextFreeId);
+    setSelectedCoffee(storedSelectedCoffee);
+    setShoppingCart(storedCart ? JSON.parse(storedCart) : []);
     //simulate an API call to fetch data
     (async () => {
       await new Promise<void>((resolve) => {
