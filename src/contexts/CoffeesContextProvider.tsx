@@ -17,10 +17,7 @@ export default function CoffeesContextProvider({
 
   const shoppingPrice = useMemo(
     () =>
-      shoppingCart
-        .map((item) => item.price)
-        .reduce((a, b) => a + b, 0)
-        .toFixed(2),
+      shoppingCart.reduce((total, item) => total + item.price, 0).toFixed(2),
     [shoppingCart]
   );
 
