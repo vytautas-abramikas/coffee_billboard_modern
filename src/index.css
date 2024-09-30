@@ -26,11 +26,13 @@ p {
 header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   background-color: SaddleBrown;
-  padding: 20px;
+  padding: 1rem;
 }
 select {
   color: Maroon;
+  font-size: 1.3rem;
 }
 select,
 button,
@@ -39,8 +41,7 @@ button,
 }
 select,
 button {
-  font-size: 1.4rem;
-  padding: 5px;
+  padding: 0.4rem;
   border: 0;
   cursor: pointer;
 }
@@ -52,6 +53,7 @@ button {
 .pay_button {
   color: White;
   margin-left: 1rem;
+  font-size: 1.4rem;
 }
 .add_button {
   background-color: Chocolate;
@@ -62,7 +64,7 @@ button {
 h3,
 p {
   text-align: center;
-  padding: 10px;
+  padding: 1rem;
   color: Black;
 }
 h1,
@@ -102,4 +104,9 @@ p {
 .remove:hover {
   color: White;
   background-color: Red;
+}
+@media only screen and (max-width: 600px) {
+  h1 {
+    display: none;
+  }
 }
