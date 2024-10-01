@@ -51,7 +51,7 @@ export default function CoffeesContextProvider({
 
   const selectCoffee = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
-    let id = event.target.value;
+    const id = event.target.value;
     setSelectedCoffee(() => {
       localStorage.setItem("coffeeBillboard_selectedCoffee", id);
       return Number(id);
