@@ -11,7 +11,7 @@ export default function CoffeeCards() {
           <h3>{item.price}€</h3>
           <p>{item.name}</p>
           <button
-            name={String(item.id)}
+            name={"btn-" + String(item.id)}
             className="remove"
             onClick={() => removeCoffee(item.id)}
           >

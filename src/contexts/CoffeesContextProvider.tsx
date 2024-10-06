@@ -10,7 +10,6 @@ export default function CoffeesContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [nextFreeId, setNextFreeId] = useState(0);
   const [selectedCoffee, setSelectedCoffee] = useState(0);
   const [coffeesList, setCoffeesList] = useState<TCoffee[]>([]);
   const [shoppingCart, setShoppingCart] = useState<TCoffee[]>([]);
@@ -22,13 +21,10 @@ export default function CoffeesContextProvider({
   );
 
   useEffect(() => {
-    const storedNextFreeId =
-      Number(localStorage.getItem("coffeeBillboard_nextFreeId")) || 0;
     const storedSelectedCoffee =
       Number(localStorage.getItem("coffeeBillboard_selectedCoffee")) || 0;
     const storedCart = localStorage.getItem("coffeeBillboard_shoppingCart");
 
-    setNextFreeId(storedNextFreeId);
     setSelectedCoffee(storedSelectedCoffee);
     setShoppingCart(storedCart ? JSON.parse(storedCart) : []);
     //simulate an API call to fetch data
@@ -61,12 +57,6 @@ export default function CoffeesContextProvider({
   const addCoffee = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    setNextFreeId((prev) => {
-      const newId = prev + 1;
-      localStorage.setItem("coffeeBillboard_nextFreeId", String(newId));
-      return newId;
-    });
-
     setShoppingCart((prev) => {
       const coffeeFromMenu = coffeesList.find(
         (item) => item.id === selectedCoffee
@@ -80,7 +70,7 @@ export default function CoffeesContextProvider({
       const { name, price, url } = coffeeFromMenu;
 
       const coffeeToAdd: TCoffee = {
-        id: nextFreeId,
+        id: Date.now(),
         name: name,
         price: price,
         url: url,
@@ -106,10 +96,6 @@ export default function CoffeesContextProvider({
     setShoppingCart(() => {
       storeShoppingCartToLocalStorage([]);
       return [];
-    });
-    setNextFreeId(() => {
-      localStorage.setItem("coffeeBillboard_nextFreeId", "0");
-      return 0;
     });
   };
 
